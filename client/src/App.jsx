@@ -7,7 +7,7 @@ function App() {
   const [file, setFile] = useState()
   const [description, setDescription] = useState("")
   // const [images, setImages] = useState([])
-  const [imagePath,setImagePath] = useState("")
+  const [key,setKey] = useState("")
 
   const submit = async event => {
     event.preventDefault()
@@ -22,8 +22,7 @@ function App() {
       return
     }
     const data = await result.json();
-    console.log(data.imagePath);
-    setImagePath(data.imagePath)
+    setKey(data.key)
   }
 
 
@@ -48,7 +47,7 @@ function App() {
         </div>
       ))} */}
 
-      <img src={`http://localhost:3000/${imagePath}`} alt="" />
+      <img src={`http://localhost:3000/image/${key}`} alt="" />
       
     </div>
   );

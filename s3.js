@@ -1,8 +1,8 @@
-require('dotenv').config()
-const fs = require('fs')
+import fs from 'fs'
+import dotenv from 'dotenv'
+dotenv.config()
 
-const S3 = require("aws-sdk/clients/s3")
-
+import { GetObjectCommand, ListBucketsCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 // creating instance of s3 class
 
 const bucketName = process.env.AWS_BUCKET_NAME
@@ -10,10 +10,12 @@ const region = process.env.AWS_BUCKET_REGION
 const accessKeyId = process.env.AWS_ACCESS_KEY
 const secretAccessKey = process.env.AWS_SECRET_KEY
 
-const s3 = new S3({
+const s3Client = new S3Client({
   region,
-  accessKeyId,
-  secretAccessKey
+  credentials : {
+    accessKeyId,
+    secretAccessKey
+  }
 })
 
 
@@ -33,19 +35,17 @@ function uploadFile(file) {
       Body: fileStream,
       Key: file.filename
     }
-  
-    return s3.upload(uploadParams).promise()
+    return s3Client.send(new PutObjectCommand(uploadParams));
   }
-  exports.uploadFile = uploadFile
-  
   
   // downloads a file from s3
-  function getFileStream(fileKey) {
-    const downloadParams = {
+async  function getFileStream(fileKey) {
+    const getObjectParams = {
       Key: fileKey,
       Bucket: bucketName
     }
-  
-    return s3.getObject(downloadParams).createReadStream()
+    const { Body } = await s3Client.send(new GetObjectCommand(getObjectParams));
+    return Body;
   }
-  exports.getFileStream = getFileStream
+
+  export {uploadFile,getFileStream}

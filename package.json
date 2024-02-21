@@ -1,6 +1,8 @@
 {
+  "type": "module",
   "description": "",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.515.0",
     "aws-sdk": "^2.1561.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
