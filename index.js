@@ -6,7 +6,7 @@ import util from 'util'
 const unlinkFile = util.promisify(fs.unlink)  // util function converts callback based method to promise based for async code management more better
 import cors from 'cors'
 const upload = multer({dest : "uploads/"})
-import { getFileStream, uploadFile } from './s3.js'
+import { deleteFile, getFileStream, uploadFile } from './s3.js'
 app.use(cors())
 
 // once we create s3 bucket,we need to create a policy for it as well,which has get,put,delete bucket option
@@ -33,6 +33,11 @@ app.post('/images',upload.single('image'),async(req,res)=>{
     // apply filter
         res.json({key : file.filename})
 
+})
+
+app.delete('/images/:filename',async(req,res)=>{
+    const {filename} = req.params
+    await deleteFile(filename)
 })
 
 // Now when user uploads a file to s3,he gets back a response which has key, using that key,he can access the image

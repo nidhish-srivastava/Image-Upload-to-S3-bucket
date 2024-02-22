@@ -2,7 +2,7 @@ import fs from 'fs'
 import dotenv from 'dotenv'
 dotenv.config()
 
-import { GetObjectCommand, ListBucketsCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, GetObjectCommand, ListBucketsCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 // creating instance of s3 class
 
 const bucketName = process.env.AWS_BUCKET_NAME
@@ -48,4 +48,12 @@ async  function getFileStream(fileKey) {
     return Body;
   }
 
-  export {uploadFile,getFileStream}
+async function deleteFile(filename){
+  const deleteParams = {
+    Bucket : bucketName,
+    Key : filename
+  }
+  return s3Client.send(new DeleteObjectCommand(deleteParams))
+}
+  
+  export {uploadFile,getFileStream,deleteFile}

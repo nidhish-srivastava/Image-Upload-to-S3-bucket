@@ -46,9 +46,7 @@ function App() {
           <img src={image}></img>
         </div>
       ))} */}
-
       <img src={`http://localhost:3000/image/${key}`} alt="" />
-      
     </div>
   );
 }
